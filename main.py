@@ -67,7 +67,8 @@ if uploaded_file is not None:
         tmp_file.write(uploaded_file.read())
         video_file = tmp_file.name
 else:
-    video_file = "/Users/jintaoma/Downloads/table-tennis-final-video-converted.mp4"
+    video_file = "video/table-tennis-final-video-converted-Scene-037.mp4"
+
 
 # 初始化选定时间
 selected_segment = None
