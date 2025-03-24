@@ -22,37 +22,84 @@ st.markdown("""
     .stApp {
         padding-top: -200px;
     }        
-    .stButton>button {
+
+    /* Long & Close 按钮 */
+    .btn-long {
+        background-color: #005f73;  /* 深青蓝色 */
+        color: white;
         width: 100px;
         border-radius: 8px;
-        background-color: #0078FF;
-        color: white;
         border: none;
         padding: 8px 15px;
-        margin-top: 5px;
-        margin-right: 4%;
         cursor: pointer;
         font-weight: bold;
     }
-    .video-container {
-        border: 3px solid #4CAF50;
-        border-radius: 10px;
-        margin-top: -20px;
+    .btn-close {
+        background-color: #0a9396;  /* 浅青蓝色 */
+        color: white;
+        width: 100px;
+        border-radius: 8px;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        font-weight: bold;
     }
-    .progress-bar {
-        margin-top: -555px;
+
+    /* High & Low 按钮 */
+    .btn-high {
+        background-color: #3a0ca3;  /* 深紫色 */
+        color: white;
+        width: 100px;
+        border-radius: 8px;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        font-weight: bold;
     }
+    .btn-low {
+        background-color: #7209b7;  /* 浅紫色 */
+        color: white;
+        width: 100px;
+        border-radius: 8px;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* Wide & Narrow 按钮 */
+    .btn-wide {
+        background-color: #588157;  /* 深黄绿色 */
+        color: white;
+        width: 100px;
+        border-radius: 8px;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .btn-narrow {
+        background-color: #a3b18a;  /* 浅黄绿色 */
+        color: white;
+        width: 100px;
+        border-radius: 8px;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
 </style>
 """, unsafe_allow_html=True)
 
 # ==================== 视频片段时间点 (每个片段的起始和结束时间) ====================
 video_segments = [
-    {"label": "Long", "start": 21, "end": 28, "color": "red"},
-    {"label": "Close", "start": 41, "end": 48, "color": "blue"},
-    {"label": "High", "start": 108, "end": 113, "color": "green"},
-    {"label": "Low", "start": 114.5, "end": 118, "color": "orange"},
-    {"label": "Wide", "start": 31, "end": 33, "color": "purple"},
-    {"label": "Narrow", "start": 119, "end": 121, "color": "black"},
+    {"label": "Long", "start": 21, "end": 28},
+    {"label": "Close", "start": 41, "end": 48},
+    {"label": "High", "start": 108, "end": 113},
+    {"label": "Low", "start": 114.5, "end": 118},
+    {"label": "Wide", "start": 31, "end": 33},
+    {"label": "Narrow", "start": 119, "end": 121},
 ]
 
 # ==================== 左侧侧边栏 (添加片段选择) ====================
@@ -79,30 +126,30 @@ if video_file:
     st.sidebar.markdown("### 🎯 Shot")
     col1, col2 = st.sidebar.columns(2)
     with col1:
-        if st.button("Long", key="btn_long"):
+        if st.sidebar.button("Long", key="btn_long", help="Long Shot", args=('btn-long',)):
             selected_segment = {"start": 21, "end": 28}
     with col2:
-        if st.button("Close", key="btn_close"):
+        if st.sidebar.button("Close", key="btn_close", help="Close Shot", args=('btn-close',)):
             selected_segment = {"start": 41, "end": 48}
 
     # =========== Angles 类别 ===========
     st.sidebar.markdown("### 📐 Angles")
     col3, col4 = st.sidebar.columns(2)
     with col3:
-        if st.button("High", key="btn_high"):
+        if st.sidebar.button("High", key="btn_high", help="High Angle", args=('btn-high',)):
             selected_segment = {"start": 108, "end": 113}
     with col4:
-        if st.button("Low", key="btn_low"):
+        if st.sidebar.button("Low", key="btn_low", help="Low Angle", args=('btn-low',)):
             selected_segment = {"start": 114.5, "end": 118}
 
     # =========== Lens 类别 ===========
     st.sidebar.markdown("### 🔍 Lens")
     col5, col6 = st.sidebar.columns(2)
     with col5:
-        if st.button("Wide", key="btn_wide"):
+        if st.sidebar.button("Wide", key="btn_wide", help="Wide Lens", args=('btn-wide',)):
             selected_segment = {"start": 31, "end": 33}
     with col6:
-        if st.button("Narrow", key="btn_narrow"):
+        if st.sidebar.button("Narrow", key="btn_narrow", help="Narrow Lens", args=('btn-narrow',)):
             selected_segment = {"start": 119, "end": 121}
 
 # ==================== 视频播放功能 ====================
