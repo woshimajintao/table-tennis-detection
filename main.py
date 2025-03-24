@@ -61,49 +61,49 @@ st.sidebar.title("✂️ Cut Detection")
 # ========== 上传视频 ========== 
 uploaded_file = st.sidebar.file_uploader("📂 Upload a video file", type=["mp4", "avi", "mov", "mkv"])
 
-# 如果上传了视频，保存到临时文件；否则使用默认视频
+# ==================== 视频初始化控制 ====================
+video_file = None
+
+# 如果上传了视频，保存到临时文件
 if uploaded_file is not None:
     with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmp_file:
         tmp_file.write(uploaded_file.read())
         video_file = tmp_file.name
-else:
-    video_file = "video/table-tennis-final-video-converted-Scene-037.mp4"
-
 
 # 初始化选定时间
 selected_segment = None
 
-# =========== Shot 类别 ===========
-st.sidebar.markdown("### 🎯 Shot")
-col1, col2 = st.sidebar.columns(2)
-with col1:
-    if st.button("Long", key="btn_long"):
-        selected_segment = {"start": 21, "end": 28}
-with col2:
-    if st.button("Close", key="btn_close"):
-        selected_segment = {"start": 41, "end": 48}
+# 只有上传了视频后，按钮才可用
+if video_file:
+    # =========== Shot 类别 ===========
+    st.sidebar.markdown("### 🎯 Shot")
+    col1, col2 = st.sidebar.columns(2)
+    with col1:
+        if st.button("Long", key="btn_long"):
+            selected_segment = {"start": 21, "end": 28}
+    with col2:
+        if st.button("Close", key="btn_close"):
+            selected_segment = {"start": 41, "end": 48}
 
-# =========== Angles 类别 ===========
-st.sidebar.markdown("### 📐 Angles")
-col3, col4 = st.sidebar.columns(2)
-with col3:
-    if st.button("High", key="btn_high"):
-        selected_segment = {"start": 108, "end": 113}
-with col4:
-    if st.button("Low", key="btn_low"):
-        selected_segment = {"start": 114.5, "end": 118}
+    # =========== Angles 类别 ===========
+    st.sidebar.markdown("### 📐 Angles")
+    col3, col4 = st.sidebar.columns(2)
+    with col3:
+        if st.button("High", key="btn_high"):
+            selected_segment = {"start": 108, "end": 113}
+    with col4:
+        if st.button("Low", key="btn_low"):
+            selected_segment = {"start": 114.5, "end": 118}
 
-# =========== Lens 类别 ===========
-st.sidebar.markdown("### 🔍 Lens")
-col5, col6 = st.sidebar.columns(2)
-with col5:
-    if st.button("Wide", key="btn_wide"):
-        selected_segment = {"start": 31, "end": 33}
-with col6:
-    if st.button("Narrow", key="btn_narrow"):
-        selected_segment = {"start": 119, "end": 121}
-
-
+    # =========== Lens 类别 ===========
+    st.sidebar.markdown("### 🔍 Lens")
+    col5, col6 = st.sidebar.columns(2)
+    with col5:
+        if st.button("Wide", key="btn_wide"):
+            selected_segment = {"start": 31, "end": 33}
+    with col6:
+        if st.button("Narrow", key="btn_narrow"):
+            selected_segment = {"start": 119, "end": 121}
 
 # ==================== 视频播放功能 ====================
 def play_video_segment(video_file, start_time, end_time):
@@ -125,24 +125,21 @@ def play_video_segment(video_file, start_time, end_time):
 
     cap.release()
 
-
 # ==================== 视频片段播放控制 ====================
 st.markdown("## 🎥 Table Tennis Match Video Clip Search")  # 新增标题
 video_placeholder = st.empty()
 
-# 初始状态：无论是否上传视频，始终播放完整原始视频（带声音）
-if 'video_file' not in st.session_state:
-    st.session_state['video_file'] = video_file
-    video_placeholder.video(st.session_state['video_file'])
+# 初始状态：未上传视频时，显示提示信息
+if not video_file:
+    st.warning("Please upload your video")
 
 # 如果上传新视频，则更新并播放新视频
-if uploaded_file is not None and st.session_state['video_file'] != video_file:
-    st.session_state['video_file'] = video_file
-    video_placeholder.video(st.session_state['video_file'])
+if video_file:
+    video_placeholder.video(video_file)
 
 # 点击按钮后播放指定片段（原视频消失）
-if selected_segment is not None:
+if selected_segment is not None and video_file:
     video_placeholder.empty()  # 清空原视频
     start_time = selected_segment["start"]
     end_time = selected_segment["end"]
-    play_video_segment(st.session_state['video_file'], start_time, end_time)
+    play_video_segment(video_file, start_time, end_time)
