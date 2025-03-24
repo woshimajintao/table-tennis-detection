@@ -126,7 +126,7 @@ def play_video_segment(video_file, start_time, end_time):
     cap.release()
 
 # ==================== 视频片段播放控制 ====================
-st.markdown("## 🎥 Table Tennis Match Video Clip Search")  # 新增标题
+st.markdown("## 🎥 Table Tennis Match Video Clip Search🏓")  # 新增标题
 video_placeholder = st.empty()
 
 # 初始状态：未上传视频时，显示提示信息
